@@ -75,7 +75,7 @@ export function renderOrderSummary() {
   function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = "";
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayJs();
+      const today = dayjs();
       const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
       const dateString = deliveryDate.format("dddd, MMMM D");
       const priceString =
@@ -117,7 +117,6 @@ export function renderOrderSummary() {
   });
   document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
-      updateDeliveryOption(productId, deliveryOptionId);
       const productId = element.dataset.productId;
       const deliveryOptionId = element.dataset.deliveryOptionId;
       updateDeliveryOption(productId, deliveryOptionId);
