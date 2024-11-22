@@ -1,10 +1,11 @@
 import { cart, addToCart } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { loadProducts, products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
-
-let productsHTML = "";
-products.forEach((product) => {
-  productsHTML += `<div class="product-container">
+loadProducts(renderProductsGrid);
+function renderProductsGrid() {
+  let productsHTML = "";
+  products.forEach((product) => {
+    productsHTML += `<div class="product-container">
           <div class="product-image-container">
             <img
               class="product-image"
@@ -19,14 +20,14 @@ products.forEach((product) => {
           <div class="product-rating-container">
             <img
               class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars * 10}.png"
+              src="${product.getStarsUrl()}"
             />
             <div class="product-rating-count link-primary">${
               product.rating.count
             }</div>
           </div>
 
-          <div class="product-price">${product.priceCents}
+          <div class="product-price">${product.getPrice()}
             
         </div>
 
@@ -44,6 +45,7 @@ products.forEach((product) => {
               <option value="10">10</option>
             </select>
           </div>
+          ${product.extraInfoHTML()}
 
           <div class="product-spacer"></div>
 
@@ -58,21 +60,22 @@ products.forEach((product) => {
           data-product-id = "${product.id}">Add to Cart</button>
         </div>
     `;
-});
-console.log(productsHTML);
-document.querySelector(".js-products-grid").innerHTML = productsHTML;
+  });
+  console.log(productsHTML);
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
-function updateCartQuantity() {
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
+  function updateCartQuantity() {
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+  }
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.dataset.productId;
+      addToCart(productId);
+      updateCartQuantity();
+    });
   });
-  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
 }
-document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  button.addEventListener("click", () => {
-    const productId = button.dataset.productId;
-    addToCart(productId);
-    updateCartQuantity();
-  });
-});
