@@ -15,6 +15,7 @@ export function renderOrderSummary() {
     const productId = cartItem.productId;
 
     const matchingProduct = getProduct(productId);
+    console.log("matching rpoducy :", matchingProduct);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
@@ -34,7 +35,8 @@ export function renderOrderSummary() {
             <div class="cart-item-details-grid">
               <img
                 class="product-image"
-                src="${matchingProduct.image}
+                src="${matchingProduct.image}"
+                alt="product image"
               />
 
               <div class="cart-item-details">
@@ -54,7 +56,7 @@ export function renderOrderSummary() {
                   <span class="delete-quantity-link link-primary js-delete-link js-delete-link-${
                     matchingProduct.id
                   }"
-                  data-product-id -"${matchingProduct.id}">
+                  data-product-id ="${matchingProduct.id}">
                     Delete
                   </span>
                 </div>
@@ -107,12 +109,19 @@ export function renderOrderSummary() {
   document.querySelector(".js-order-summary").innerHTML = cartSummaryHtml;
   document.querySelectorAll(".js-delete-link").forEach((link) => {
     link.addEventListener("click", () => {
+      console.log("link : ", link);
       const productId = link.dataset.productId;
       removeFromCart(productId);
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`
       );
-      // container.remove();
+      console.log("product id :", productId, container);
+      if (container) {
+        container.remove();
+      } else {
+        console.log("warning error");
+      }
+
       renderPaymentSummary();
     });
   });

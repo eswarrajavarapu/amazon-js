@@ -10,6 +10,7 @@ function renderProductsGrid() {
             <img
               class="product-image"
               src="${product.image}"
+              alt="product-image"
             />
           </div>
 
